@@ -1,7 +1,7 @@
 // ============================================
 //  CONFIG
 // ============================================
-const VERCEL_URL = 'https://slc-clan-ftap.vercel.app';
+const VERCEL_URL = 'https://ttm-clan-ftap.vercel.app';
 
 // ============================================
 //  SCROLL PROGRESS
@@ -257,7 +257,7 @@ async function loadGallery() {
 
         galleryGrid.innerHTML = data.photos.map(photo => `
             <div class="gallery-item">
-                <img src="${photo.url}" alt="${photo.caption || 'SLC'}" loading="lazy">
+                <img src="${photo.url}" alt="${photo.caption || 'TTM'}" loading="lazy">
                 ${photo.caption ? `<div class="gallery-caption">${photo.caption}</div>` : ''}
                 <button class="gallery-delete-btn" data-url="${photo.url}" title="Удалить">✕</button>
             </div>
@@ -412,14 +412,15 @@ if (chatForm) {
 
             const data = await response.json();
 
+            // ВЫВОДИМ ОШИБКУ НА ЭКРАН ДЛЯ ОТЛАДКИ
             if (data.ok) {
                 addMessage('✅ Сообщение отправлено администрации. Ответ появится здесь автоматически.', 'system');
             } else {
-                addMessage('⚠️ Не удалось отправить. Попробуйте позже.', 'system');
+                addMessage('⚠️ Ошибка сервера: ' + (data.error || 'неизвестная'), 'system');
             }
         } catch (error) {
             console.error('Chat send error:', error);
-            addMessage('⚠️ Ошибка соединения. Проверьте интернет.', 'system');
+            addMessage('⚠️ Ошибка соединения: ' + error.message, 'system');
         }
     });
 }
@@ -481,7 +482,7 @@ document.querySelectorAll('input, select, textarea').forEach(input => {
 //  INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ SLC Clan Website Loaded');
+    console.log('✅ TTM Clan Website Loaded');
     console.log('🌐 Vercel:', VERCEL_URL);
 
     if (galleryGrid) {
