@@ -1,4 +1,4 @@
-// api/webhook.js — обрабатывает ответы и нажатия кнопок из Telegram
+// api/webhook.js — обрабатывает нажатия кнопок и ответы (Reply)
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,6 +15,7 @@ module.exports = async function handler(req, res) {
         try {
             const update = req.body;
 
+            // 1. ОБРАБОТКА КНОПКИ «ПОСМОТРЕЛ(А)»
             if (update.callback_query) {
                 try {
                     const cb = update.callback_query;
@@ -47,11 +48,12 @@ module.exports = async function handler(req, res) {
                         });
                     }
                 } catch (e) {
-                    console.error('Error processing callback_query:', e);
+                    console.error('Callback error:', e);
                 }
                 return res.status(200).json({ ok: true });
             }
 
+            // 2. ОБРАБОТКА ОТВЕТОВ (REPLY)
             if (update.message && update.message.reply_to_message) {
                 try {
                     const replyText = update.message.text;
@@ -74,19 +76,18 @@ module.exports = async function handler(req, res) {
                         }
                     }
                 } catch (e) {
-                    console.error('Error processing reply message:', e);
+                    console.error('Reply error:', e);
                 }
                 return res.status(200).json({ ok: true });
             }
 
             return res.status(200).json({ ok: true });
-
         } catch (error) {
-            console.error('Fatal Webhook POST error:', error);
             return res.status(200).json({ ok: true });
         }
     }
 
+    // 3. САЙТ ЗАБИРАЕТ ОТВЕТЫ
     if (req.method === 'GET') {
         const userId = req.query.userId;
         if (!userId) return res.status(400).json({ error: 'No userId' });
@@ -104,7 +105,6 @@ module.exports = async function handler(req, res) {
                 .map(m => ({ from: m.from, text: m.text, time: m.time }));
             return res.status(200).json({ messages });
         } catch (error) {
-            console.error('Webhook GET error:', error);
             return res.status(500).json({ error: error.message });
         }
     }
