@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
 
     if (req.method === 'OPTIONS') return res.status(200).end();
 
-    const BOT_TOKEN = '8908023869:AAEYpmjQ5NpBvlTyUCbTm_jpbdBbnhWM65o';
+    const BOT_TOKEN = '9296428751:AAGZiHOzMyFwRt6ZhEhoEE29ohDgcG8RdxY';
     const KV_URL = process.env.KV_REST_API_URL;
     const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 
