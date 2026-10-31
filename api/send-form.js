@@ -1,4 +1,4 @@
-// api/send-form.js — принимает заявки с форм, шлёт в группу с кнопкой «Посмотрел(а)»
+// api/send-form.js — заявки с форм в группу с кнопкой
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,31 +12,24 @@ module.exports = async function handler(req, res) {
     const ADMIN_CHAT_ID = '-1004399249500';
 
     const { type, data } = req.body;
-
     if (!type || !data) {
         return res.status(400).json({ error: 'Missing type or data' });
     }
 
     const msgId = Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-
     let telegramText = '';
-
-    // ============================================
-    //  Формируем сообщение в зависимости от типа
-    // ============================================
 
     if (type === 'join') {
         telegramText =
-            `🎮 <b>ЗАЯВКА НА ВСТУПЛЕНИЕ В КЛАН SLC</b>\n\n` +
+            `🎮 <b>ЗАЯВКА НА ВСТУПЛЕНИЕ В КЛАН TTM</b>\n\n` +
             `🆔 <b>msgId:</b> <code>${msgId}</code>\n` +
             `👤 <b>Никнейм:</b> ${data.nickname}\n` +
             `🎂 <b>Возраст:</b> ${data.age}\n` +
             `⚡ <b>Опыт в FTAP:</b> ${data.experience} мес.\n` +
             `📊 <b>Ранг:</b> ${data.rank}\n` +
-            `💬 <b>Почему SLC:</b> ${data.why}\n` +
+            `💬 <b>Почему TTM:</b> ${data.why}\n` +
             `🔗 <b>Telegram:</b> ${data.contact}`;
-    }
-    else if (type === 'complaint') {
+    } else if (type === 'complaint') {
         const typeNames = {
             'toxicity': 'Токсичность / Оскорбления',
             'cheating': 'Читы / Нечестная игра',
@@ -45,7 +38,7 @@ module.exports = async function handler(req, res) {
             'other': 'Другое'
         };
         telegramText =
-            `⚠️ <b>ЖАЛОБА НА УЧАСТНИКА SLC</b>\n\n` +
+            `⚠️ <b>ЖАЛОБА НА УЧАСТНИКА TTM</b>\n\n` +
             `🆔 <b>msgId:</b> <code>${msgId}</code>\n` +
             `👤 <b>Заявитель:</b> ${data.yourNick}\n` +
             `🎯 <b>Нарушитель:</b> ${data.targetNick}\n` +
@@ -53,8 +46,7 @@ module.exports = async function handler(req, res) {
             `📅 <b>Дата инцидента:</b> ${data.date}\n` +
             `📝 <b>Описание:</b> ${data.description}\n` +
             `🔗 <b>Доказательства:</b> ${data.evidence || 'Нет'}`;
-    }
-    else if (type === 'moderator') {
+    } else if (type === 'moderator') {
         const rankNames = {
             'ml_admin': 'мл.админ',
             'admin': 'админ',
@@ -63,7 +55,7 @@ module.exports = async function handler(req, res) {
             'coowner': 'соовнер'
         };
         telegramText =
-            `🛡️ <b>ЗАЯВКА НА МОДЕРАТОРА SLC</b>\n\n` +
+            `🛡️ <b>ЗАЯВКА НА МОДЕРАТОРА TTM</b>\n\n` +
             `🆔 <b>msgId:</b> <code>${msgId}</code>\n` +
             `👤 <b>Никнейм:</b> ${data.nickname}\n` +
             `🎂 <b>Возраст:</b> ${data.age}\n` +
@@ -73,8 +65,7 @@ module.exports = async function handler(req, res) {
             `📋 <b>Опыт модерации:</b> ${data.experience || 'Нет опыта'}\n` +
             `🕐 <b>График:</b> ${data.availability}\n` +
             `🔗 <b>Telegram:</b> ${data.discord}`;
-    }
-    else {
+    } else {
         return res.status(400).json({ error: 'Unknown type' });
     }
 
